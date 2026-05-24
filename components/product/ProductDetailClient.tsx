@@ -6,13 +6,12 @@ import { AttributeSection } from "@/components/product/AttributeSection";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
 
-// Modular Components
+// UI Components
 import { ProductGallery } from "./ProductGallery";
 import { ProductPricing } from "./ProductPricing";
 import { ProductActions } from "./ProductActions";
 import { TrustBadges } from "./TrustBadges";
 
-// ── Price Calculation Utility ──────────────────────────────────────────────────
 function calcPricing(variant?: ProductVariant) {
   if (!variant) return { mrp: 0, selling: 0, savings: 0, discountLabel: null };
   const mrp = variant.mrpPrice || 0;
@@ -33,13 +32,12 @@ function calcPricing(variant?: ProductVariant) {
     discountLabel = `${d.amount}% OFF`;
   }
 
-  // Handle case where .value might be the final price
+  // Use discount.value directly if it looks like a selling price
   if (d.value && d.value > mrp / 2 && d.value < mrp) selling = d.value;
 
   return { mrp, selling, savings: mrp - selling, discountLabel };
 }
 
-// ── Tab Definitions ────────────────────────────────────────────────────────────
 const TABS = [
   { key: "attributes", label: "Specifications" },
   { key: "description", label: "Description" },
@@ -50,9 +48,8 @@ const TABS = [
 
 type TabKey = (typeof TABS)[number]["key"];
 
-// ── Main Component ─────────────────────────────────────────────────────────────
 export default function ProductDetailClient({ product }: { product: Product }) {
-  const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
+  const [selectedVariantIdx] = useState(0);
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<TabKey>("attributes");
@@ -68,7 +65,6 @@ export default function ProductDetailClient({ product }: { product: Product }) {
   return (
     <div className="container mx-auto px-4 md:px-0">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mb-12 lg:mb-20">
-        {/* Left: Gallery */}
         <ProductGallery
           images={product.images || []}
           selectedImageIdx={selectedImageIdx}
@@ -77,7 +73,6 @@ export default function ProductDetailClient({ product }: { product: Product }) {
           discountLabel={discountLabel}
         />
 
-        {/* Right: Info & Actions */}
         <div className="flex flex-col gap-8">
           <div className="space-y-4">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 bg-zinc-50 border border-zinc-100 rounded-lg px-4 py-1.5 w-fit block">
@@ -112,7 +107,6 @@ export default function ProductDetailClient({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Detail Tabs */}
       <div className="bg-white mb-20">
         <div className="flex overflow-x-auto border-b border-zinc-100 scrollbar-hide gap-3 py-2">
           {TABS.map((tab) => (

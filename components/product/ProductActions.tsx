@@ -1,6 +1,7 @@
 "use client";
 
-import { ShoppingCart, ShoppingBag, Heart } from "lucide-react";
+import { useOptimistic, useTransition, useState } from "react";
+import { ShoppingCart, ShoppingBag, Heart, CheckCircle2 } from "lucide-react";
 
 interface ProductActionsProps {
   inStock: boolean;
@@ -23,9 +24,30 @@ export const ProductActions = ({
   onToggleWishlist,
   isLiked,
 }: ProductActionsProps) => {
+  const [isPending, startTransition] = useTransition();
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // Instantly reflect the adding status using React 19 optimistic updates
+  const [optimisticStatus, setOptimisticStatus] = useOptimistic(
+    "idle",
+    (state, newStatus: string) => newStatus,
+  );
+
+  const handleAddToCart = async () => {
+    startTransition(async () => {
+      setOptimisticStatus("adding");
+      onAddToCart();
+
+      // Give the user a moment to see the 'Adding' state for better feel
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 2000);
+    });
+  };
+
   return (
     <div className="space-y-6">
-      {/* Quantity Selector */}
       <div className="space-y-3">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
           Set Quantity
@@ -50,10 +72,9 @@ export const ProductActions = ({
         </div>
       </div>
 
-      {/* Primary Actions */}
       <div className="flex flex-col sm:flex-row gap-3">
         <button
-          disabled={!inStock}
+          disabled={!inStock || isPending}
           onClick={onBuyNow}
           className="flex-[2] relative group overflow-hidden bg-[#233f6c] text-white font-black py-4.5 rounded-lg transition-all shadow-xl shadow-blue-900/20 active:scale-[0.98] disabled:opacity-40"
         >
@@ -65,16 +86,37 @@ export const ProductActions = ({
         </button>
 
         <button
-          disabled={!inStock}
-          onClick={onAddToCart}
-          className="flex-1 min-w-[150px] relative group overflow-hidden bg-zinc-50 hover:bg-[#233f6c] text-[#233f6c] hover:text-white font-black py-4.5 rounded-lg transition-all border border-zinc-200 hover:border-[#233f6c] active:scale-[0.98]"
+          disabled={!inStock || isPending || isSuccess}
+          onClick={handleAddToCart}
+          className={`flex-1 min-w-[150px] relative group overflow-hidden font-black py-4.5 rounded-lg transition-all border active:scale-[0.98] ${
+            isSuccess
+              ? "bg-green-600 border-green-600 text-white"
+              : "bg-zinc-50 hover:bg-[#233f6c] text-[#233f6c] hover:text-white border-zinc-200 hover:border-[#233f6c]"
+          }`}
         >
-          <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           <div className="relative flex items-center justify-center gap-2">
-            <ShoppingCart className="w-4 h-4" />
-            <span className="text-[10px] uppercase tracking-[0.15em]">
-              Add to Cart
-            </span>
+            {isSuccess ? (
+              <>
+                <CheckCircle2 className="w-4 h-4 animate-in zoom-in duration-300" />
+                <span className="text-[10px] uppercase tracking-[0.15em] animate-in slide-in-from-bottom-1 duration-300">
+                  Added!
+                </span>
+              </>
+            ) : optimisticStatus === "adding" ? (
+              <>
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                <span className="text-[10px] uppercase tracking-[0.15em] opacity-70">
+                  Adding...
+                </span>
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4" />
+                <span className="text-[10px] uppercase tracking-[0.15em]">
+                  Add to Cart
+                </span>
+              </>
+            )}
           </div>
         </button>
 
