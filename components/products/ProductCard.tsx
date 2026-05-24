@@ -2,12 +2,14 @@ import React from "react";
 import Link from "next/link";
 import { Product } from "@/types/product";
 import { Heart, ShoppingCart } from "lucide-react";
+import { useCartStore } from "@/store/useCartStore";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const addItem = useCartStore((state) => state.addItem);
   const variant = product.variants?.[0];
   const mrp = variant?.mrpPrice || 0;
   const discount = variant?.discount;
@@ -97,7 +99,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <button className="flex-none p-2 bg-white rounded-full border-2 border-[#233f6c] hover:border-[#004a99] hover:bg-[#004a99]/5 transition-colors group/heart">
           <Heart className="w-6 h-6 text-[#233f6c] group-hover/heart:text-[#004a99] transition-colors" />
         </button>
-        <button className="bg-[#233f6c] text-white font-bold py-2.5 px-5 rounded-md transition-all duration-300 hover:bg-[#003366] group-hover:bg-[#004a99] hover:shadow-lg active:scale-[0.95] flex items-center justify-center gap-2 group/buy relative overflow-hidden">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            addItem(product);
+          }}
+          className="bg-[#233f6c] text-white font-bold py-2.5 px-5 rounded-md transition-all duration-300 hover:bg-[#003366] group-hover:bg-[#004a99] hover:shadow-lg active:scale-[0.95] flex items-center justify-center gap-2 group/buy relative overflow-hidden"
+        >
           <span className="relative z-10">Buy Now</span>
           <ShoppingCart className="w-5 h-5 relative z-10 transition-transform duration-300 group-hover/buy:translate-x-1" />
         </button>
