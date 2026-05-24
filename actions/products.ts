@@ -19,7 +19,6 @@ export async function getProductsList(
         query: GET_PRODUCTS_LIST,
         variables: { skip, limit },
       }),
-      cache: "no-store",
     });
 
     const { data } = await response.json();
@@ -43,7 +42,6 @@ export async function getProductDetail(uid: string): Promise<any> {
         query: GET_PRODUCT_DETAIL,
         variables: { uid },
       }),
-      cache: "no-store",
     });
 
     const json = await response.json();

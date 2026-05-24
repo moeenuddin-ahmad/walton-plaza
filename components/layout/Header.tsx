@@ -15,8 +15,8 @@ export const Header = () => {
   const wishlistCount = getTotalWishlistItems();
 
   return (
-    <header className="border-b border-zinc-100 bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full">
-      <div className="container mx-auto px-4 lg:px-1 py-2.5 lg:py-4">
+    <header className="border-b border-zinc-100 bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full flex-1 flex flex-col md:px-8 px-4 py-2.5 lg:py-4 bg-[#EDF6FF]">
+      <div className="container mx-auto ">
         {/* Top Row: Logo & Actions (Mobile) | All (Desktop) */}
         <div className="flex items-center justify-between gap-3">
           {/* Logo */}
