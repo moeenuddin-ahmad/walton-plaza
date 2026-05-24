@@ -4,7 +4,7 @@ import { GET_PRODUCT_DETAIL } from "@/queries/products";
 import { GET_PRODUCTS_LIST } from "@/queries/products";
 
 // check env please
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.API;
 
 // list page
 export async function getProductsList(
@@ -22,8 +22,11 @@ export async function getProductsList(
       cache: "no-store",
     });
 
-    const data = await response.json();
-    return data;
+    const { data } = await response.json();
+    return {
+      products: data?.getProducts?.result?.products,
+      count: data?.getProducts?.result?.count,
+    };
   } catch (error) {
     console.error("Error fetching product list:", error);
     return null;
@@ -43,8 +46,8 @@ export async function getProductDetail(uid: string): Promise<any> {
       cache: "no-store",
     });
 
-    const data = await response.json();
-    return data;
+    const json = await response.json();
+    return json?.data?.getProducts?.result?.products?.[0] || null;
   } catch (error) {
     console.error("Error fetching product detail:", error);
     return null;
