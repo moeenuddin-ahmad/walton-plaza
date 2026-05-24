@@ -7,16 +7,14 @@ const Home = async () => {
 
   return (
     <div className="container mx-auto py-12">
-      <div className="flex justify-between items-end mb-12">
-        <div className="space-y-4">
-          <h1 className="text-5xl font-black tracking-tighter text-zinc-900">
-            Featured Products
-          </h1>
-          <p className="text-zinc-500 font-medium text-lg">
-            Showing <span className="text-black">{products?.length || 0}</span>{" "}
-            of {count || 0} items
-          </p>
-        </div>
+      <div className="flex justify-between items-center mb-12">
+        <h1 className="text-4xl font-black text-black font-semibold">
+          Featured Products
+        </h1>
+        <p className="text-gray-500 font-normal text-base">
+          Showing <span className="text-black">{products?.length || 0}</span> of{" "}
+          <span className="text-black">{count || 0}</span> items
+        </p>
       </div>
       <ProductList initialProducts={products} totalCount={count} />
     </div>
