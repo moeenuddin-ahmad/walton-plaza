@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { ShoppingBag, Search, Heart, User } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
@@ -15,17 +16,20 @@ export const Header = () => {
 
   return (
     <header className="border-b border-zinc-100 bg-white/80 backdrop-blur-md sticky top-0 z-40 w-full">
-      <div className="container mx-auto px-2 px-4 lg:px-8 py-2.5 lg:py-4">
+      <div className="container mx-auto px-4 lg:px-8 py-2.5 lg:py-4">
         {/* Top Row: Logo & Actions (Mobile) | All (Desktop) */}
         <div className="flex items-center justify-between gap-3">
           {/* Logo */}
-          <div className="flex-none -ml-1">
+          <Link
+            href="/"
+            className="flex-none -ml-1 hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+          >
             <img
               src="/logo.svg"
               alt="Walton Plaza"
               className="h-4.5 sm:h-6 w-auto"
             />
-          </div>
+          </Link>
 
           {/* Search Bar - Hidden on Mobile, Visible on Desktop */}
           <div className="hidden lg:flex flex-1 max-w-2xl mx-8">
