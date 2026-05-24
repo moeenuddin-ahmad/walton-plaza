@@ -5,7 +5,7 @@ const Home = async () => {
   const { products, count } = await getProductsList(0, 10);
 
   return (
-    <div className="max-w-7xl mx-auto py-12">
+    <div className="container mx-auto py-12">
       <div className="flex justify-between items-end mb-12">
         <div className="space-y-4">
           <h1 className="text-5xl font-black tracking-tighter text-zinc-900">
