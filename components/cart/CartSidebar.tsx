@@ -82,7 +82,7 @@ export const CartSidebar: React.FC = () => {
             </div>
             <button
               onClick={closeCart}
-              className="hover:bg-zinc-50 rounded-full transition-all group active:scale-90 "
+              className="p-2.5 border border-zinc-200 hover:bg-zinc-50 rounded-full transition-all group active:scale-90"
             >
               <X className="w-6 h-6 text-gray-400 group-hover:text-zinc-900 transition-colors" />
             </button>

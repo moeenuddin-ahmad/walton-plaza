@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "../components/layout/Header";
 import { Footer } from "../components/layout/Footer";
 import { CartSidebar } from "../components/cart/CartSidebar";
+import { WishlistSidebar } from "../components/wishlist/WishlistSidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,11 +25,12 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen flex flex-col font-sans">
         <Header />
-        <main className="flex-1 flex flex-col p-8 bg-[#EDF6FF]">
+        <main className="flex-1 flex flex-col md:p-8 p-4 bg-[#EDF6FF]">
           {children}
         </main>
         <Footer />
         <CartSidebar />
+        <WishlistSidebar />
       </body>
     </html>
   );

@@ -6,12 +6,12 @@ const Home = async () => {
   const { products, count } = await getProductsList(0, DEFAULT_LIMIT);
 
   return (
-    <div className="container mx-auto py-12">
-      <div className="flex justify-between items-center mb-12">
-        <h1 className="text-4xl font-black text-black font-semibold">
+    <div className="container mx-auto">
+      <div className="flex justify-between items-center md:mb-12 mb-5 flex-wrap">
+        <h1 className="text-2xl md:text-4xl font-black text-black font-semibold">
           Featured Products
         </h1>
-        <p className="text-gray-500 font-normal text-base">
+        <p className="text-gray-500 font-normal text-sm md:text-base">
           Showing <span className="text-black">{products?.length || 0}</span> of{" "}
           <span className="text-black">{count || 0}</span> items
         </p>
