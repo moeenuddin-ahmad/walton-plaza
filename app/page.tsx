@@ -1,9 +1,8 @@
 import { getProductsList } from "@/actions/products";
-import { ProductCard } from "@/components/ProductCard";
-import { Product } from "@/types/product";
+import ProductList from "@/components/products/ProductList";
 
 const Home = async () => {
-  const { products, count } = await getProductsList(0, 12);
+  const { products, count } = await getProductsList(0, 10);
 
   return (
     <div className="max-w-7xl mx-auto py-12">
@@ -18,18 +17,7 @@ const Home = async () => {
           </p>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {products?.map((product: Product) => (
-          <ProductCard key={product.uid} product={product} />
-        )) || (
-          <div className="col-span-full py-24 text-center">
-            <p className="text-zinc-400 text-lg">
-              No products found. Check your API connection.
-            </p>
-          </div>
-        )}
-      </div>
+      <ProductList initialProducts={products} totalCount={count} />
     </div>
   );
 };
