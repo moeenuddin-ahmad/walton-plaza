@@ -1,8 +1,9 @@
 import { getProductsList } from "@/actions/products";
 import ProductList from "@/components/products/ProductList";
+import { DEFAULT_LIMIT } from "@/constants";
 
 const Home = async () => {
-  const { products, count } = await getProductsList(0, 10);
+  const { products, count } = await getProductsList(0, DEFAULT_LIMIT);
 
   return (
     <div className="container mx-auto py-12">

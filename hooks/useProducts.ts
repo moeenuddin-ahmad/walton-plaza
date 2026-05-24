@@ -2,6 +2,8 @@ import { useState, useTransition } from "react";
 import { Product } from "@/types/product";
 import { getProductsList } from "@/actions/products";
 
+import { DEFAULT_LIMIT } from "@/constants";
+
 interface UseProductsProps {
   initialProducts: Product[];
   totalCount: number;
@@ -11,7 +13,7 @@ interface UseProductsProps {
 export const useProducts = ({
   initialProducts,
   totalCount,
-  initialLimit = 10,
+  initialLimit = DEFAULT_LIMIT,
 }: UseProductsProps) => {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [currentPage, setCurrentPage] = useState(1);
