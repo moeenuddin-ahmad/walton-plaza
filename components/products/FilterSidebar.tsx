@@ -5,7 +5,6 @@ import { Filter, X, ChevronDown } from "lucide-react";
 
 interface FilterSidebarProps {
   filters: {
-    priceRange: number[];
     isAvailable: boolean | null;
     category: string;
   };
@@ -35,33 +34,6 @@ export const FilterSidebar = ({
             <X className="w-5 h-5" />
           </button>
         )}
-      </div>
-
-      {/* Price Range */}
-      <div className="space-y-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
-          Price Range
-        </p>
-        <div className="space-y-2">
-          <input
-            type="range"
-            min="0"
-            max="500000"
-            step="1000"
-            value={filters.priceRange[1]}
-            onChange={(e) =>
-              onFilterChange({
-                ...filters,
-                priceRange: [0, parseInt(e.target.value)],
-              })
-            }
-            className="w-full h-1.5 bg-zinc-100 rounded-lg appearance-none cursor-pointer accent-[#233f6c]"
-          />
-          <div className="flex justify-between text-[11px] font-bold text-zinc-500">
-            <span>৳0</span>
-            <span>Up to ৳{filters.priceRange[1].toLocaleString()}</span>
-          </div>
-        </div>
       </div>
 
       {/* Availability */}
@@ -128,7 +100,6 @@ export const FilterSidebar = ({
       <button
         onClick={() =>
           onFilterChange({
-            priceRange: [0, 500000],
             isAvailable: null,
             category: "",
           })

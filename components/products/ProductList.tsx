@@ -88,7 +88,6 @@ const ProductList = ({
                   <button
                     onClick={() =>
                       handleFilterChange({
-                        priceRange: [0, 500000],
                         isAvailable: null,
                         category: "",
                       })

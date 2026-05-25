@@ -22,7 +22,6 @@ export const useProducts = ({
 
   // Filters & Sorting
   const [filters, setFilters] = useState({
-    priceRange: [0, 500000],
     isAvailable: null as boolean | null,
     category: "",
   });
