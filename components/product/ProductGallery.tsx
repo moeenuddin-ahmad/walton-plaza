@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PLACEHOLDER = "https://placehold.co/600x600/f4f4f5/a1a1aa?text=No+Image";
 
+import ReactImageMagnify from "react-image-magnify";
+
 interface ProductGalleryProps {
   images: { url: string }[];
   selectedImageIdx: number;
@@ -21,28 +23,44 @@ export const ProductGallery = ({
   discountLabel,
 }: ProductGalleryProps) => {
   const currentImages = images.length > 0 ? images : [{ url: PLACEHOLDER }];
+  const mainImage = currentImages[selectedImageIdx]?.url || PLACEHOLDER;
 
   return (
     <div className="space-y-4">
-      {/* Main Image */}
-      <div className="relative aspect-square bg-white rounded-lg border border-zinc-100 overflow-hidden group">
-        <Image
-          src={currentImages[selectedImageIdx]?.url || PLACEHOLDER}
-          alt={productName}
-          fill
-          className="object-contain p-6 md:p-10 mix-blend-multiply transition-transform duration-700 group-hover:scale-110"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
+      {/* Main Image with Magnify */}
+      <div className="relative aspect-square bg-white rounded-lg border border-zinc-100 overflow-hidden group z-40">
+        <div className="w-full h-full [&>div]:!shadow-none [&>div>img]:object-contain [&>div>img]:p-10 [&>div>img]:mix-blend-multiply">
+          <ReactImageMagnify
+            {...{
+              smallImage: {
+                alt: productName,
+                isFluidWidth: true,
+                src: mainImage,
+              },
+              largeImage: {
+                src: mainImage,
+                width: 1200,
+                height: 1200,
+              },
+              enlargedImagePosition: "beside",
+              enlargedImageContainerClassName:
+                "z-[100] rounded-2xl border border-zinc-100 shadow-2xl bg-white",
+              hoverDelayInMs: 0,
+              hoverOffDelayInMs: 0,
+              fadeDurationInMs: 300,
+            }}
+          />
+        </div>
 
         {/* Navigation Arrows */}
         {currentImages.length > 1 && (
-          <>
+          <div className="pointer-events-none absolute inset-0 z-50">
             <button
               onClick={() =>
                 setSelectedImageIdx(Math.max(0, selectedImageIdx - 1))
               }
               disabled={selectedImageIdx === 0}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-zinc-500 hover:text-[#233f6c] disabled:opacity-20 transition-all z-10"
+              className="pointer-events-auto absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-zinc-500 hover:text-[#233f6c] disabled:opacity-20 transition-all"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -53,16 +71,16 @@ export const ProductGallery = ({
                 )
               }
               disabled={selectedImageIdx === currentImages.length - 1}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-zinc-500 hover:text-[#233f6c] disabled:opacity-20 transition-all z-10"
+              className="pointer-events-auto absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur rounded-full shadow-lg flex items-center justify-center text-zinc-500 hover:text-[#233f6c] disabled:opacity-20 transition-all"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-          </>
+          </div>
         )}
 
         {/* Discount Badge */}
         {discountLabel && (
-          <div className="absolute top-4 left-4 bg-[#e31e24] text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-xl z-10">
+          <div className="absolute top-4 left-4 bg-[#e31e24] text-white text-[10px] font-black px-3 py-1.5 rounded-lg uppercase tracking-widest shadow-xl z-10 pointer-events-none">
             {discountLabel}
           </div>
         )}
