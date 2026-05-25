@@ -49,7 +49,7 @@ const TABS = [
 type TabKey = (typeof TABS)[number]["key"];
 
 export default function ProductDetailClient({ product }: { product: Product }) {
-  const [selectedVariantIdx] = useState(0);
+  const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<TabKey>("attributes");
@@ -102,6 +102,33 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             onToggleWishlist={() => toggleWishlist(product)}
             isLiked={isLiked}
           />
+
+          {/* Variant Selection */}
+          {product.variants.length > 1 && (
+            <div className="space-y-4">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
+                Select Variant
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {product.variants.map((v, idx) => (
+                  <button
+                    key={v.ebsItemCode || idx}
+                    onClick={() => setSelectedVariantIdx(idx)}
+                    className={`px-4 py-2 text-[11px] font-black uppercase tracking-widest rounded-lg border transition-all ${
+                      selectedVariantIdx === idx
+                        ? "bg-[#233f6c] text-white border-[#233f6c] shadow-lg shadow-blue-900/10"
+                        : "bg-white text-zinc-500 border-zinc-200 hover:border-zinc-400"
+                    }`}
+                  >
+                    Variant {idx + 1}
+                    <span className="ml-1 opacity-60">
+                      (৳{Math.round(calcPricing(v).selling).toLocaleString()})
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <TrustBadges />
         </div>

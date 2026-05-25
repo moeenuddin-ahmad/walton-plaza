@@ -20,19 +20,37 @@ export const useProducts = ({
   const [limit, setLimit] = useState(initialLimit);
   const [isPending, startTransition] = useTransition();
 
+  // Filters & Sorting
+  const [filters, setFilters] = useState({
+    priceRange: [0, 500000],
+    isAvailable: null as boolean | null,
+    category: "",
+  });
+  const [sort, setSort] = useState("default");
+
   const totalPages = Math.ceil(totalCount / limit);
 
-  const fetchProducts = (page: number, newLimit: number) => {
+  const fetchProducts = (
+    page: number,
+    newLimit: number,
+    currentFilters = filters,
+    currentSort = sort,
+  ) => {
     if (page < 1 || (page > totalPages && totalPages !== 0)) return;
 
     startTransition(async () => {
       const skip = (page - 1) * newLimit;
+
+      // Note: In a real scenario, we would pass currentFilters and currentSort
+      // to the getProductsList action which would then pass them to GraphQL.
       const response = await getProductsList(skip, newLimit);
 
       if (response?.products) {
         setProducts(response.products);
         setCurrentPage(page);
-        if (newLimit !== limit) setLimit(newLimit);
+        setLimit(newLimit);
+        setFilters(currentFilters);
+        setSort(currentSort);
 
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -47,13 +65,25 @@ export const useProducts = ({
     fetchProducts(1, newLimit);
   };
 
+  const handleFilterChange = (newFilters: typeof filters) => {
+    fetchProducts(1, limit, newFilters);
+  };
+
+  const handleSortChange = (newSort: string) => {
+    fetchProducts(1, limit, filters, newSort);
+  };
+
   return {
     products,
     currentPage,
     limit,
     isPending,
     totalPages,
+    filters,
+    sort,
     handlePageChange,
     handleLimitChange,
+    handleFilterChange,
+    handleSortChange,
   };
 };

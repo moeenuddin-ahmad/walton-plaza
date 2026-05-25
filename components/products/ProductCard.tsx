@@ -2,6 +2,7 @@
 
 import React, { useOptimistic, useTransition, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Product } from "@/types/product";
 import { Heart, ShoppingCart, CheckCircle2 } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
@@ -24,25 +25,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 
   const isLiked = isInWishlist(product.uid);
-  const variant = product.variants?.[0];
-  const mrp = variant?.mrpPrice || 0;
-  const discount = variant?.discount;
+  const { discountedPrice, savedAmount, discountDisplay, mrp, discount } =
+    React.useMemo(() => {
+      const variant = product.variants?.[0];
+      const mrp = variant?.mrpPrice || 0;
+      const discount = variant?.discount;
 
-  let discountedPrice = mrp;
-  let savedAmount = 0;
-  let discountDisplay = "";
+      let discountedPrice = mrp;
+      let savedAmount = 0;
+      let discountDisplay = "";
 
-  if (discount && discount.type !== "NOT_AVAILABLE") {
-    if (discount.type === "PERCENTAGE") {
-      savedAmount = (mrp * discount.value) / 100;
-      discountedPrice = mrp - savedAmount;
-      discountDisplay = `${discount.value}% OFF`;
-    } else if (discount.type === "FLAT") {
-      savedAmount = discount.value;
-      discountedPrice = mrp - savedAmount;
-      discountDisplay = `SAVE ${discount.value}`;
-    }
-  }
+      if (discount && discount.type !== "NOT_AVAILABLE") {
+        if (discount.type === "PERCENTAGE") {
+          savedAmount = (mrp * (discount.amount || discount.value)) / 100;
+          discountedPrice = mrp - savedAmount;
+          discountDisplay = `${discount.amount || discount.value}% OFF`;
+        } else if (discount.type === "FLAT") {
+          savedAmount = discount.amount || discount.value;
+          discountedPrice = mrp - savedAmount;
+          discountDisplay = `SAVE ${discount.amount || discount.value}`;
+        }
+      }
+
+      return { discountedPrice, savedAmount, discountDisplay, mrp, discount };
+    }, [product.variants]);
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -77,10 +83,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <div className="relative aspect-[4/3] p-6 flex items-center justify-center bg-white group-hover:p-4 transition-all duration-500">
           {product.images?.[0]?.url ? (
-            <img
+            <Image
               src={product.images[0].url}
               alt={product.enName}
-              className="w-full h-full object-contain mix-blend-multiply"
+              fill
+              className="object-contain p-4 mix-blend-multiply transition-transform duration-500 group-hover:scale-110"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <div className="w-full h-full bg-zinc-50 rounded-2xl" />
