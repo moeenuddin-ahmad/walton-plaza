@@ -4,7 +4,7 @@ A high-performance, premium e-commerce Product Listing (PLP) and Product Detail 
 
 ## 🔗 Live Demo
 
-**[Launch Walton Plaza Demo](https://walton-plaza-dywhdknw3-mashrufhasans-projects.vercel.app/)**
+**[Launch Walton Plaza Demo](https://walton-plaza.vercel.app/)**
 
 ---
 
